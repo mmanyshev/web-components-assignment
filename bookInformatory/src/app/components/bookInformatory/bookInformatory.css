@@ -1,0 +1,36 @@
+
+:host {
+
+  --spacing-s: 8px;
+  --spacing-m: 16px;
+  --blue-color-base: #10559a;
+
+  display: block;
+
+  width: 800px;
+  margin: auto;
+
+}
+
+header {
+  text-align: center;
+}
+
+header > h1 {
+  margin: 2em 0 .25em;
+}
+
+header > h2 {
+  margin: 0 0 1.3em;
+}
+
+.form {
+
+  padding: var(--spacing-s);
+
+  border-radius: 3px;
+
+  color: #fff;
+  background: var(--blue-color-base);
+
+}

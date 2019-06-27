@@ -14,6 +14,7 @@ module.exports = baseConfiguration({
 
   entry: {
     main: path.join(locations.SOURCE_FOLDER, "app"),
+    ...locations.COMPONENT_CHUNK_LIST,
   },
 
   output: {

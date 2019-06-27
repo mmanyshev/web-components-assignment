@@ -6,7 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="That is just test assignement page" />
 
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+
     <title>Web Components Playground</title>
+
+    <style>
+      html {
+
+        font-family: 'Open Sans', sans-serif;
+
+        overflow-y: scroll;
+
+        color: #444;
+        background: #f9c6d7;
+
+      }
+    </style>
 
   </head>
   <body>
@@ -15,20 +30,7 @@
       You need to enable JavaScript to run this app.
     </noscript>
 
-    <div class="app">
-
-      <input class="app__search" />
-      <button class="app__voice">Activate/Deactivate</button>
-
-      <div class="app__last-search-label"></div>
-
-      <div class="app__message">
-        Empty list or just the beginning
-      </div>
-
-      <ul class="app__carousel"></ul>
-
-    </div>
+    <mm-book-informatory></mm-book-informatory>
 
   </body>
 </html>

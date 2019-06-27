@@ -1,0 +1,2 @@
+
+export { BookInformatory } from "./bookInformatory";

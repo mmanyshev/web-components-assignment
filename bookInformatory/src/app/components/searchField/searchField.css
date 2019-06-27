@@ -1,0 +1,35 @@
+
+:host {
+
+  --field-height: 36px;
+
+  display: flex;
+
+}
+
+input {
+
+  display: flex;
+  align-items: center;
+  appearance: none;
+
+  flex: 1;
+
+  height: var(--field-height);
+
+  text-align: center;
+
+  border: 0 none;
+  background: #fff;
+
+}
+
+button {
+
+  display: block;
+  appearance: none;
+
+  border: 0 none;
+  background: #fff;
+
+}
