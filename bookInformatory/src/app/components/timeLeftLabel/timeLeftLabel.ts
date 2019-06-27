@@ -4,10 +4,29 @@ import markup from "./timeLeftLabel.html";
 
 import { buildTemplate } from "app/utils/buildTemplate";
 
-const UPDATE_INTERVAL = 1e3;
+const UPDATE_INTERVAL = 8e3;
+
+const MINUTE = 60 * 1e3;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+
 const template = buildTemplate(style, markup);
 
-function getTimeUnit() {
+function getTimeFormatterArgs(timeDiff: number) {
+
+  if (timeDiff < MINUTE) {
+    return [Math.floor(timeDiff / 1e3), "seconds"];
+  }
+
+  if (timeDiff < HOUR) {
+    return [Math.floor(timeDiff / HOUR), "minutes"];
+  }
+
+  if (timeDiff < DAY) {
+    return [Math.floor(timeDiff / DAY), "hours"];
+  }
+
+  return [Math.floor(timeDiff / DAY), "days"];
 
 }
 
@@ -58,6 +77,8 @@ export class TimeLeftLabel extends HTMLElement {
   private restartInterval() {
 
     window.clearInterval(this.intervalRef);
+
+    this.updateLabel();
     this.intervalRef = window.setInterval(this.updateLabel.bind(this) , UPDATE_INTERVAL);
 
   }
@@ -93,8 +114,12 @@ export class TimeLeftLabel extends HTMLElement {
       return;
     }
 
-    const delta = Date.now() - since;
-    this.root.innerHTML = this.timeFormatter.format(delta, "seconds");
+    const timeDiff = since - Date.now();
+
+    this.root.innerHTML = this.timeFormatter.format(
+      ...getTimeFormatterArgs(timeDiff),
+      { style: "long" },
+    );
 
   }
 
