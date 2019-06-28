@@ -24,15 +24,6 @@ export class BookInformatory extends HTMLElement {
   private readonly searchField: SearchField | null;
   private readonly timeLeftLabel: HTMLElement | null;
 
-  // public state = {
-
-  //   books: [],
-  //   searchString: "", // will I need this?
-
-  //   isLoading: false,
-
-  // };
-
   constructor() {
 
     super();
@@ -41,7 +32,7 @@ export class BookInformatory extends HTMLElement {
 
     this.carousel = this.root.querySelector("mm-carousel");
     this.searchField = this.root.querySelector("mm-search-field");
-    this.timeLeftLabel = this.root.querySelector("mm-time-left-label");
+    this.timeLeftLabel = this.root.querySelector("mm-time-past-label");
 
     this.search = debounce(this.search.bind(this), 500);
 

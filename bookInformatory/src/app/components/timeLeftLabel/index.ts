@@ -1,2 +1,0 @@
-
-export { TimeLeftLabel } from "./timeLeftLabel";
