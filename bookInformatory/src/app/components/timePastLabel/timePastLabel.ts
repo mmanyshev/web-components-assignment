@@ -23,13 +23,13 @@ function getTimeFormatterArgs(milliseconds: number) {
     return [seconds, "seconds"];
   }
 
-  const minutes = roundTime(seconds / MINUTE)
+  const minutes = roundTime(seconds / MINUTE);
 
   if (minutes < HOUR) {
     return [minutes, "minutes"];
   }
 
-  const hours = Math.floor(minutes / HOUR)
+  const hours = Math.floor(minutes / HOUR);
 
   if (hours < DAY) {
     return [hours, "hours"];
@@ -148,7 +148,8 @@ export class TimePastLabel extends HTMLElement {
 
     const timeDiff = Math.abs(since - Date.now());
 
-    this.timeLabel.textContent = this.timeFormatter.format(...getTimeFormatterArgs(timeDiff));
+    const [timeSince, unit] = getTimeFormatterArgs(timeDiff);
+    this.timeLabel.textContent = this.timeFormatter.format(-timeSince, unit);
     this.timeLabel.setAttribute("datetime", new Date(since).toISOString());
 
   }
