@@ -3,23 +3,31 @@ import style from "./carousel.css";
 import markup from "./carousel.html";
 
 import { AppComponent } from "app/appComponent";
+import { IntervalTask } from "app/intervalTask";
 import { CarouselItem } from "./carouselItem";
 
 export class Carousel extends AppComponent {
 
   static TAG_NAME = "mm-carousel";
-  public readonly intersectionObserver: IntersectionObserver;
 
   private wrapper: HTMLElement | null;
+  private carouselScroller: IntervalTask;
+  private carouselScrolleStep: number = 0;
+
+  public readonly intersectionObserver: IntersectionObserver;
 
   constructor() {
 
     super(style, markup);
     this.wrapper = this.root.querySelector(".wrapper");
 
+    this.autoScroll = this.autoScroll.bind(this);
+    this.onPageVisibilityChange = this.onPageVisibilityChange.bind(this);
+
+    this.carouselScroller = new IntervalTask(this.autoScroll, 3e3);
+
     // I'm gonna be using intersectionObserver
-    // since "loading" attribute for <img />
-    // is not yet supported
+    // since "loading" attribute for <img /> is not yet supported
 
     const observerOptions = {
       root: this.wrapper,
@@ -28,12 +36,19 @@ export class Carousel extends AppComponent {
     };
 
     this.intersectionObserver =
-      new IntersectionObserver(this.observerCallback, observerOptions);
+      new IntersectionObserver(this.onObserverChange, observerOptions);
 
   }
 
+  connectedCallback() {
+    document.addEventListener("visibilitychange", this.onPageVisibilityChange);
+  }
+
   discocnnectedCallback() {
+
     this.intersectionObserver.disconnect();
+    document.removeEventListener("visibilitychange", this.onPageVisibilityChange);
+
   }
 
   public set items(value: any[]) {
@@ -49,6 +64,8 @@ export class Carousel extends AppComponent {
 
     }
 
+    this.carouselScroller.pause();
+
     while (this.wrapper.firstChild) {
 
       const node = <HTMLElement>this.wrapper.firstElementChild;
@@ -58,7 +75,12 @@ export class Carousel extends AppComponent {
 
     }
 
+    if (!slides.length) {
+      return;
+    }
+
     const slidesFragment = document.createDocumentFragment();
+
     slides.forEach((data) => {
 
       const slide = <CarouselItem>document.createElement(CarouselItem.TAG_NAME);
@@ -72,10 +94,11 @@ export class Carousel extends AppComponent {
     });
 
     this.wrapper.appendChild(slidesFragment);
+    this.carouselScroller.run();
 
   }
 
-  private observerCallback(entries: IntersectionObserverEntry[]) {
+  private onObserverChange(entries: IntersectionObserverEntry[]) {
 
     entries.forEach((entry) => {
 
@@ -88,6 +111,30 @@ export class Carousel extends AppComponent {
       target.loaded = true;
 
     });
+
+  }
+
+  private onPageVisibilityChange() {
+
+    if (document.hidden) {
+      this.carouselScroller.pause();
+    }
+
+    if (!document.hidden) {
+      this.carouselScroller.run();
+    }
+
+  }
+
+  autoScroll() {
+
+    if (!this.wrapper) {
+      return;
+    }
+
+    const width = this.wrapper.clientWidth;
+    this.wrapper.scrollBy({ top: 0, left: width, behavior: "smooth" });
+
   }
 
 }
