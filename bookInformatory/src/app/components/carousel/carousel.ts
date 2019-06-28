@@ -12,9 +12,8 @@ export class Carousel extends AppComponent {
 
   private wrapper: HTMLElement | null;
   private carouselScroller: IntervalTask;
-  private carouselScrolleStep: number = 0;
 
-  public readonly intersectionObserver: IntersectionObserver;
+  private readonly intersectionObserver: IntersectionObserver;
 
   constructor() {
 
@@ -24,14 +23,14 @@ export class Carousel extends AppComponent {
     this.autoScroll = this.autoScroll.bind(this);
     this.onPageVisibilityChange = this.onPageVisibilityChange.bind(this);
 
-    this.carouselScroller = new IntervalTask(this.autoScroll, 3e3);
+    this.carouselScroller = new IntervalTask(this.autoScroll, 1e3);
 
     // I'm gonna be using intersectionObserver
     // since "loading" attribute for <img /> is not yet supported
 
     const observerOptions = {
       root: this.wrapper,
-      rootMargin: "20%",
+      rootMargin: "80px",
       treshold: 0.1,
     };
 
@@ -41,10 +40,20 @@ export class Carousel extends AppComponent {
   }
 
   connectedCallback() {
+
+    if (this.wrapper) {
+      this.wrapper.addEventListener("keydown", this.preventKeysNavigation);
+    }
+
     document.addEventListener("visibilitychange", this.onPageVisibilityChange);
+
   }
 
   discocnnectedCallback() {
+
+    if (this.wrapper) {
+      this.wrapper.removeEventListener("keydown", this.preventKeysNavigation);
+    }
 
     this.intersectionObserver.disconnect();
     document.removeEventListener("visibilitychange", this.onPageVisibilityChange);
@@ -55,13 +64,20 @@ export class Carousel extends AppComponent {
     this.buildSlides(value);
   }
 
+  private appendSlideTo = (fragment: DocumentFragment, slideTagName: string, slideData: any) => {
+
+    const slide = <CarouselItem>document.createElement(CarouselItem.TAG_NAME);
+    slide.createSlide(slideTagName, slideData);
+
+    fragment.appendChild(slide);
+    this.intersectionObserver.observe(slide);
+
+  }
+
   private buildSlides(slides: any[]) {
 
     if (!this.wrapper) {
-
-      console.warn("no wrapper");
       return;
-
     }
 
     this.carouselScroller.pause();
@@ -79,26 +95,24 @@ export class Carousel extends AppComponent {
       return;
     }
 
+    const slideTagName = this.getAttribute("slide-component") || "div";
     const slidesFragment = document.createDocumentFragment();
 
-    slides.forEach((data) => {
+    slides.forEach((slideData) =>
+      this.appendSlideTo(slidesFragment, slideTagName, slideData));
 
-      const slide = <CarouselItem>document.createElement(CarouselItem.TAG_NAME);
-      const slideTagName = this.getAttribute("slide-component") || "div";
+    // // In order to implemetn smooth scrolling in
+    // // one direction we will need to duplicate first slide in the end
 
-      slide.createSlide(slideTagName, data);
-
-      slidesFragment.appendChild(slide);
-      this.intersectionObserver.observe(slide);
-
-    });
+    // const [ firstSlideData ] = slides;
+    // this.appendSlideTo(slidesFragment, slideTagName, firstSlideData)
 
     this.wrapper.appendChild(slidesFragment);
     this.carouselScroller.run();
 
   }
 
-  private onObserverChange(entries: IntersectionObserverEntry[]) {
+  private onObserverChange = (entries: IntersectionObserverEntry[]) => {
 
     entries.forEach((entry) => {
 
@@ -126,15 +140,31 @@ export class Carousel extends AppComponent {
 
   }
 
-  autoScroll() {
+  private autoScroll() {
 
     if (!this.wrapper) {
       return;
     }
 
-    const width = this.wrapper.clientWidth;
-    this.wrapper.scrollBy({ top: 0, left: width, behavior: "smooth" });
+    const {
+      scrollLeft,
+      scrollWidth,
+      clientWidth,
+    } = this.wrapper;
 
+    if (scrollLeft === scrollWidth - clientWidth) {
+
+      this.wrapper.scrollTo(0, 0);
+      return;
+
+    }
+
+    this.wrapper.scrollBy(clientWidth, 0);
+
+  }
+
+  private preventKeysNavigation(event: KeyboardEvent) {
+    event.preventDefault();
   }
 
 }

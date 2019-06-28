@@ -123,8 +123,6 @@ export class TimePastLabel extends AppComponent {
 
   private updateLabel() {
 
-    console.log(this.timeLabel);
-
     if (!this.timeLabel) {
       return;
     }
