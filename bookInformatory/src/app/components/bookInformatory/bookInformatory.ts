@@ -8,7 +8,6 @@ import { OpenLibraryBook } from "app/openLibrary/openLibraryBook";
 
 import { Carousel } from "app/components/carousel";
 import { SearchField } from "app/components/searchField";
-// import { Carousel } from "app/components/carousel";
 
 import { buildTemplate } from "app/utils/buildTemplate";
 import { performSearch } from "app/openLibrary/openLibraryApi";
@@ -62,13 +61,24 @@ export class BookInformatory extends HTMLElement {
 
   }
 
+  private setLoading(value: boolean) {
+
+    if (!this.searchField) {
+      return;
+    }
+
+    this.searchField.loading = value;
+
+  }
+
   private search(searchString: string) {
 
-    console.log("Call search");
+    this.setLoading(true);
+
     return performSearch(searchString)
       .then((data) => {
 
-        console.log(data.items);
+        this.setLoading(false);
         this.onSearchDone(data.items);
 
       });

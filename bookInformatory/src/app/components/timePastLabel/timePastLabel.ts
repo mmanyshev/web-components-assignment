@@ -87,10 +87,6 @@ export class TimePastLabel extends HTMLElement {
       return;
     }
 
-    if (oldValue === newValue) {
-      return;
-    }
-
     this.updateLabel();
     this.restartInterval();
 

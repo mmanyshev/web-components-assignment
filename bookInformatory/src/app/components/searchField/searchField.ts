@@ -3,6 +3,7 @@ import style from "./searchField.css";
 import markup from "./searchField.html";
 
 import { buildTemplate } from "app/utils/buildTemplate";
+import { updateComponentProp } from "app/utils/updateComponentProp";
 
 const template = buildTemplate(style, markup);
 
@@ -12,6 +13,7 @@ export class SearchField extends HTMLElement {
   public readonly root: ShadowRoot;
 
   private readonly field: HTMLInputElement | null;
+  private readonly loader: HTMLElement | null;
   private readonly voiceSearchToggle: HTMLButtonElement | null;
 
   constructor() {
@@ -22,6 +24,7 @@ export class SearchField extends HTMLElement {
     this.root.appendChild(template.content.cloneNode(true));
 
     this.field = this.root.querySelector("input");
+    this.loader =this.root.querySelector("span");
     this.voiceSearchToggle = this.root.querySelector("button");
 
     if (this.field) {
@@ -60,6 +63,45 @@ export class SearchField extends HTMLElement {
       // recognition.onend = function () { ... };
 
     }
+
+  }
+
+  static get observedAttributes() {
+    return ["loading"];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+
+    if (name === "loading") {
+      this.updateLaoder();
+    }
+
+  }
+
+  get loading() {
+    return this.hasAttribute("loading");
+  }
+
+  set loading(value: boolean) {
+
+    if (value) {
+
+      this.setAttribute("loading", "");
+      return;
+
+    }
+
+    this.removeAttribute("loading");
+
+  }
+
+  private updateLaoder() {
+
+    if (!this.loader) {
+      return;
+    }
+
+    this.loader.hidden = !this.loading;
 
   }
 
