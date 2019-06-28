@@ -139,7 +139,7 @@ export class TimePastLabel extends HTMLElement {
 
     if (!since) {
 
-      this.timeLabel.textContent = "never";
+      this.timeLabel.textContent = "-";
       this.timeLabel.removeAttribute("datetime");
 
       return;
