@@ -23,7 +23,7 @@ export class Carousel extends AppComponent {
     this.autoScroll = this.autoScroll.bind(this);
     this.onPageVisibilityChange = this.onPageVisibilityChange.bind(this);
 
-    this.carouselScroller = new IntervalTask(this.autoScroll, 1e3);
+    this.carouselScroller = new IntervalTask(this.autoScroll, 3e3);
 
     // I'm gonna be using intersectionObserver
     // since "loading" attribute for <img /> is not yet supported

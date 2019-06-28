@@ -3,7 +3,7 @@ import style from "./bookCard.css";
 import markup from "./bookCard.html";
 
 import { AppComponent } from "app/appComponent";
-import { OpenLibraryBook } from "app/openLibrary/openLibraryBook";
+import { OpenLibraryBook, OpenLibraryCover } from "app/openLibrary";
 import { ICarouselSlideCard } from "app/components/carousel";
 
 export class BookCard extends AppComponent implements ICarouselSlideCard {
@@ -18,15 +18,54 @@ export class BookCard extends AppComponent implements ICarouselSlideCard {
 
     console.log(value);
 
-    const title = this.root.querySelector(".title");
-    if (title) {
-      title.textContent = value.title;
+    this.setTitle(value.title);
+    this.setAuthors(value.authors);
+
+    this.setImage(value.cover);
+
+  }
+
+  private setTitle(title: string) {
+
+    const titleNode = this.root.querySelector(".title");
+
+    if (!titleNode) {
+      return;
     }
 
-    const pic = <HTMLImageElement>this.root.querySelector(".cover-picture");
-    if (pic) {
-      pic.dataset.src = value.cover.large || "";
+    titleNode.textContent = title;
+
+  }
+
+  private setAuthors(authors: string[]) {
+
+    const authorsListNode = this.root.querySelector(".authors")
+
+    if (!authorsListNode) {
+      return;
     }
+
+    authors.forEach((author) => {
+
+      const listItem = document.createElement("li");
+      listItem.textContent = author;
+
+      authorsListNode.appendChild(listItem);
+
+    });
+
+  }
+
+  private setImage(cover: OpenLibraryCover) {
+
+    const pic = <HTMLImageElement>this.root.querySelector(".cover-picture");
+
+    if (!pic) {
+      return;
+    }
+
+    pic.dataset.src = cover.large || "";
+    pic.dataset.srcset = `${cover.small} 480w, ${cover.medium} 600w, ${cover.large} 800w`;
 
   }
 
@@ -44,6 +83,7 @@ export class BookCard extends AppComponent implements ICarouselSlideCard {
       }
 
       image.src = image.dataset.src;
+      image.srcset = image.dataset.srcset || "";
       return;
 
     }

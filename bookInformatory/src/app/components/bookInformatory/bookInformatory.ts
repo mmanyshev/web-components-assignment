@@ -4,13 +4,11 @@ import { debounce } from "ts-debounce";
 import style from "./bookInformatory.css";
 import markup from "./bookInformatory.html";
 
-import { OpenLibraryBook } from "app/openLibrary/openLibraryBook";
+import { performSearch, OpenLibraryBook } from "app/openLibrary";
 
 import { AppComponent } from "app/appComponent";
 import { Carousel } from "app/components/carousel";
 import { SearchField } from "app/components/searchField";
-
-import { performSearch } from "app/openLibrary/openLibraryApi";
 
 export class BookInformatory extends AppComponent {
 

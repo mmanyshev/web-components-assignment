@@ -12,12 +12,12 @@ interface OpenLibrarySearchResult {
 }
 
 const BASE_URL = "https://openlibrary.org";
-const SEARCH_PAGE_SIZE = 5;
+const SEARCH_PAGE_SIZE = 15;
 
 export function performSearch(searchString: string, timestamp: number): Promise<OpenLibrarySearchResult> {
 
   const query = qs.stringify({
-    q: searchString,
+    title: searchString,
     limit: SEARCH_PAGE_SIZE,
   });
 

@@ -1,7 +1,7 @@
 
 const COVERS_BASE_URL = "http://covers.openlibrary.org/b";
 
-interface OpenLibraryCover {
+export interface OpenLibraryCover {
 
   readonly small?: string;
   readonly medium?: string;
@@ -13,6 +13,10 @@ function pickCoverParams(doc: any): string[] | null {
 
   if (doc.cover_edition_key) {
     return ["olid", doc.cover_edition_key];
+  }
+
+  if (doc.edition_key) {
+    return ["olid", doc.edition_key[0]];
   }
 
   if (doc.isbn && doc.isbn.length) {
