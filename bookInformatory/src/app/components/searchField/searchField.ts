@@ -40,6 +40,27 @@ export class SearchField extends HTMLElement {
 
   connectedCallback() {
 
+    if (!this.voiceSearchToggle || !this.field) {
+      return;
+    }
+
+    if (!("webkitSpeechRecognition" in window)) {
+
+      this.voiceSearchToggle.setAttribute("hidden", "hiddem");
+
+    } else {
+
+      const recognition = new webkitSpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      // recognition.onstart = function () { ... };
+      // recognition.onresult = function (event) { ... };
+      // recognition.onerror = function (event) { ... };
+      // recognition.onend = function () { ... };
+
+    }
+
   }
 
 }

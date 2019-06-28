@@ -12,3 +12,19 @@ declare module "*.html" {
 declare namespace Intl {
   const RelativeTimeFormat: any;
 }
+
+declare class webkitSpeechRecognition {
+
+  continuous: boolean;
+  interimResults: boolean;
+
+  abort: () => void;
+  start: () => void;
+  stop: () => void;
+
+  onstart: () => void;
+  onresult: (event: any) => void;
+  onerror: (event: any) => void;
+  onend: (event: any) => void;
+
+}
