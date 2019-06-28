@@ -9,11 +9,6 @@ declare module "*.html" {
   export default _;
 }
 
-declare interface ICarouselSlideCard extends HTMLElement {
-  data: any,
-  loaded: boolean,
-}
-
 declare namespace Intl {
   const RelativeTimeFormat: any;
 }

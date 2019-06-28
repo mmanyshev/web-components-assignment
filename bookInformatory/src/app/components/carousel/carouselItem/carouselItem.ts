@@ -1,5 +1,6 @@
 
 import { AppComponent } from "app/appComponent";
+import { ICarouselSlideCard } from "..";
 
 export class CarouselItem extends AppComponent {
 

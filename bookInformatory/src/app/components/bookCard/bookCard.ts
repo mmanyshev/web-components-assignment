@@ -4,6 +4,7 @@ import markup from "./bookCard.html";
 
 import { AppComponent } from "app/appComponent";
 import { OpenLibraryBook } from "app/openLibrary/openLibraryBook";
+import { ICarouselSlideCard } from "app/components/carousel";
 
 export class BookCard extends AppComponent implements ICarouselSlideCard {
 
