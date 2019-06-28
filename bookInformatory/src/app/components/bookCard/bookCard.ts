@@ -5,7 +5,7 @@ import markup from "./bookCard.html";
 import { AppComponent } from "app/appComponent";
 import { OpenLibraryBook } from "app/openLibrary/openLibraryBook";
 
-export class BookCard extends AppComponent {
+export class BookCard extends AppComponent implements ICarouselSlideCard {
 
   public static TAG_NAME = "mm-book-card";
 
@@ -17,7 +17,6 @@ export class BookCard extends AppComponent {
 
     console.log(value);
 
-
     const title = this.root.querySelector(".title");
     if (title) {
       title.textContent = value.title;
@@ -25,9 +24,35 @@ export class BookCard extends AppComponent {
 
     const pic = <HTMLImageElement>this.root.querySelector(".cover-picture");
     if (pic) {
-      pic.src = value.cover.large || "";
+      pic.dataset.src = value.cover.large || "";
     }
 
+  }
+
+  set loaded(value: boolean) {
+
+    console.log("loaded", value);
+
+    if (value) {
+
+      this.setAttribute("loaded", "");
+      const image = <HTMLImageElement>this.root.querySelector("img");
+
+      if (!image.dataset.src) {
+        return;
+      }
+
+      image.src = image.dataset.src;
+      return;
+
+    }
+
+    this.removeAttribute("loaded");
+
+  }
+
+  get loaded() {
+    return this.hasAttribute("loaded");
   }
 
 }

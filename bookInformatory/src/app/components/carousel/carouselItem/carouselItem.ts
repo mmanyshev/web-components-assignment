@@ -1,30 +1,36 @@
 
-import { buildTemplate } from "app/utils/buildTemplate";
-//import { updateComponentProp } from "app/utils/updateComponentProp";
+import { AppComponent } from "app/appComponent";
 
-const template = buildTemplate("", "");
-
-export class CarouselItem extends HTMLElement {
+export class CarouselItem extends AppComponent {
 
   static TAG_NAME = "mm-carousel-item";
-  public readonly root: ShadowRoot;
+  private slideCard: ICarouselSlideCard | null = null;
 
-  constructor() {
+  public createSlide(tagName: string, data: any) {
 
-    super();
+    this.slideCard =
+      <ICarouselSlideCard>document.createElement(tagName);
 
-    this.root = this.attachShadow({ mode: "open" });
-    this.root.appendChild(template.content.cloneNode(true));
+    this.slideCard.data = data;
+    this.root.appendChild(this.slideCard);
 
   }
 
-  set data(value: any) {
+  set loaded(value: boolean) {
 
-    const childTagName = this.getAttribute("child-tag-name") || "mm-book-card";
-    const childNode = <any>document.createElement(childTagName);
+    if (!this.slideCard) {
+      return;
+    }
 
-    childNode.data = value;
-    this.root.appendChild(childNode);
+    this.slideCard.loaded = value;
+
+  }
+
+  get loaded() {
+
+    return Boolean(
+      this.slideCard && this.slideCard.loaded,
+    );
 
   }
 
