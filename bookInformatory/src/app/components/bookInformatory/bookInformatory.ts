@@ -23,6 +23,8 @@ export class BookInformatory extends HTMLElement {
   private readonly searchField: SearchField | null;
   private readonly timeLeftLabel: HTMLElement | null;
 
+  private lastSearchTimestamp: number = 0;
+
   constructor() {
 
     super();
@@ -77,9 +79,14 @@ export class BookInformatory extends HTMLElement {
   private search(searchString: string) {
 
     this.setLoading(true);
+    this.lastSearchTimestamp = Date.now();
 
-    return performSearch(searchString)
+    return performSearch(searchString, this.lastSearchTimestamp)
       .then((data) => {
+
+        if (data.timestamp < this.lastSearchTimestamp) {
+          return;
+        }
 
         this.setLoading(false);
         this.onSearchDone(data.items);
