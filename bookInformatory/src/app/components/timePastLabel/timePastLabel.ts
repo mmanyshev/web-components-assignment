@@ -11,8 +11,6 @@ const MINUTE = 60;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-const template = buildTemplate(style, markup);
-
 function roundTime(value: number) {
   return Math.floor(value * 10) / 10;
 }
@@ -40,6 +38,8 @@ function getTimeFormatterArgs(milliseconds: number) {
   return [Math.floor(hours / DAY), "days"];
 
 }
+
+const template = buildTemplate(style, markup);
 
 export class TimePastLabel extends HTMLElement {
 

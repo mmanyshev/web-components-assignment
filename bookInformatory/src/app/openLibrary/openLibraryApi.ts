@@ -8,7 +8,7 @@ interface OpenLibrarySearchResult {
 }
 
 const BASE_URL = "https://openlibrary.org";
-const SEARCH_PAGE_SIZE = 15;
+const SEARCH_PAGE_SIZE = 5;
 
 export function performSearch(searchString: string): Promise<OpenLibrarySearchResult> {
 

@@ -52,7 +52,10 @@ export class BookInformatory extends HTMLElement {
   private onSearchDone(items: OpenLibraryBook[]) {
 
     if (this.timeLeftLabel) {
-      this.timeLeftLabel.setAttribute("since", Date.now().toString());
+
+      const now = Date.now().toString();
+      this.timeLeftLabel.setAttribute("since", now);
+
     }
 
     if (this.carousel) {
