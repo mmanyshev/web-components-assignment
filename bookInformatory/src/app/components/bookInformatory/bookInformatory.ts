@@ -6,18 +6,15 @@ import markup from "./bookInformatory.html";
 
 import { OpenLibraryBook } from "app/openLibrary/openLibraryBook";
 
+import { AppComponent } from "app/appComponent";
 import { Carousel } from "app/components/carousel";
 import { SearchField } from "app/components/searchField";
 
-import { buildTemplate } from "app/utils/buildTemplate";
 import { performSearch } from "app/openLibrary/openLibraryApi";
 
-const template = buildTemplate(style, markup);
-
-export class BookInformatory extends HTMLElement {
+export class BookInformatory extends AppComponent {
 
   static TAG_NAME = "mm-book-informatory";
-  public readonly root: ShadowRoot;
 
   private readonly carousel: Carousel | null;
   private readonly searchField: SearchField | null;
@@ -27,9 +24,7 @@ export class BookInformatory extends HTMLElement {
 
   constructor() {
 
-    super();
-    this.root = this.attachShadow({ mode: "open" });
-    this.root.appendChild(template.content.cloneNode(true));
+    super(style, markup);
 
     this.carousel = this.root.querySelector("mm-carousel");
     this.searchField = this.root.querySelector("mm-search-field");
@@ -44,10 +39,6 @@ export class BookInformatory extends HTMLElement {
       this.search(value);
 
     });
-
-  }
-
-  connectedCallback() {
 
   }
 

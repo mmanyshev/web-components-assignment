@@ -2,8 +2,8 @@
 import style from "./timePastLabel.css";
 import markup from "./timePastLabel.html";
 
-import { buildTemplate } from "app/utils/buildTemplate";
 import { updateComponentProp } from "app/utils/updateComponentProp";
+import { AppComponent } from "app/appComponent";
 
 const UPDATE_INTERVAL = 8e3;
 
@@ -39,12 +39,9 @@ function getTimeFormatterArgs(milliseconds: number) {
 
 }
 
-const template = buildTemplate(style, markup);
-
-export class TimePastLabel extends HTMLElement {
+export class TimePastLabel extends AppComponent {
 
   static TAG_NAME = "mm-time-past-label";
-  public readonly root: ShadowRoot;
 
   private intervalRef = 0;
   private readonly timeLabel: HTMLTimeElement | null;
@@ -52,10 +49,7 @@ export class TimePastLabel extends HTMLElement {
 
   constructor() {
 
-    super();
-
-    this.root = this.attachShadow({ mode: "open" });
-    this.root.appendChild(template.content.cloneNode(true));
+    super(style, markup);
 
     this.timeLabel = this.root.querySelector("time");
 

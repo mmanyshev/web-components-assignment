@@ -2,15 +2,12 @@
 import style from "./searchField.css";
 import markup from "./searchField.html";
 
-import { buildTemplate } from "app/utils/buildTemplate";
-import { updateComponentProp } from "app/utils/updateComponentProp";
+// import { updateComponentProp } from "app/utils/updateComponentProp";
+import { AppComponent } from "app/appComponent";
 
-const template = buildTemplate(style, markup);
-
-export class SearchField extends HTMLElement {
+export class SearchField extends AppComponent {
 
   static TAG_NAME = "mm-search-field";
-  public readonly root: ShadowRoot;
 
   private readonly field: HTMLInputElement | null;
   private readonly loader: HTMLElement | null;
@@ -18,10 +15,7 @@ export class SearchField extends HTMLElement {
 
   constructor() {
 
-    super();
-
-    this.root = this.attachShadow({ mode: "open" });
-    this.root.appendChild(template.content.cloneNode(true));
+    super(style, markup);
 
     this.field = this.root.querySelector("input");
     this.loader =this.root.querySelector("span");
