@@ -8,8 +8,8 @@ import { AppComponent } from "app/appComponent";
 const UPDATE_INTERVAL = 8e3;
 
 const MINUTE = 60;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
+const HOUR = 60;
+const DAY = 24;
 
 function roundTime(value: number) {
   return Math.floor(value * 10) / 10;
@@ -104,7 +104,7 @@ export class TimePastLabel extends AppComponent {
       return Number(this.getAttribute("since"));
     }
 
-    return Date.now();
+    return;
 
   }
 
