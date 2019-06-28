@@ -8,7 +8,8 @@
       "import-name": false,
       "ordered-imports": false,
       "object-literal-sort-keys": false,
-      "quotemark": [true, "double"]
+      "quotemark": [true, "double"],
+      "ter-arrow-parens": false
     },
     "rulesDirectory": []
 }

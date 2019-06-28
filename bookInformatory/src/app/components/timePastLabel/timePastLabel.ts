@@ -4,6 +4,7 @@ import markup from "./timePastLabel.html";
 
 import { updateComponentProp } from "app/utils/updateComponentProp";
 import { AppComponent } from "app/appComponent";
+import { IntervalTask } from "app/intervalTask";
 
 const UPDATE_INTERVAL = 8e3;
 
@@ -43,20 +44,22 @@ export class TimePastLabel extends AppComponent {
 
   static TAG_NAME = "mm-time-past-label";
 
-  private intervalRef = 0;
   private readonly timeLabel: HTMLTimeElement | null;
   private readonly timeFormatter: any;
+
+  private updateTimeLabelTask: IntervalTask;
 
   constructor() {
 
     super(style, markup);
-
     this.timeLabel = this.root.querySelector("time");
 
     // not looking at cases where user locale
     // is not supported...
     const { language = "en_EN" } = navigator;
     this.timeFormatter = new Intl.RelativeTimeFormat(language, { style: "long" });
+
+    this.updateTimeLabelTask = new IntervalTask(this.updateLabel, UPDATE_INTERVAL);
 
   }
 
@@ -72,7 +75,7 @@ export class TimePastLabel extends AppComponent {
   }
 
   disconnectedCallback() {
-    window.clearInterval(this.intervalRef);
+    this.updateTimeLabelTask.pause();
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -81,20 +84,14 @@ export class TimePastLabel extends AppComponent {
       return;
     }
 
-    this.updateLabel();
-    this.restartInterval();
-
-  }
-
-  private restartInterval() {
-
-    window.clearInterval(this.intervalRef);
+    this.updateTimeLabelTask.pause();
+    this.updateTimeLabelTask.runOnce();
 
     if (!this.since) {
       return;
     }
 
-    this.intervalRef = window.setInterval(this.updateLabel.bind(this) , UPDATE_INTERVAL);
+    this.updateTimeLabelTask.run();
 
   }
 
@@ -121,7 +118,7 @@ export class TimePastLabel extends AppComponent {
 
   }
 
-  private updateLabel() {
+  private updateLabel = () => {
 
     if (!this.timeLabel) {
       return;

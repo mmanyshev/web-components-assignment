@@ -24,6 +24,10 @@ export class IntervalTask {
 
   }
 
+  runOnce() {
+    this.taskFn();
+  }
+
   pause() {
     window.clearInterval(this.intervalRef);
   }

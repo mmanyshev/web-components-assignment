@@ -31,6 +31,21 @@ describe("<mm-time-past-label>", () => {
 
   });
 
+  it("react to 'since' prop and reflect it in the attribute", () => {
+
+    const now = Date.now();
+
+    document.body.innerHTML =
+      `<mm-time-past-label since="${now}"></mm-time-past-label>`;
+
+    const label = document.querySelector("mm-time-past-label");
+    label.since = Date.now();
+
+    expect(label.getAttribute("since")).to.be.equal(now.toString());
+    expect(label.shadowRoot.textContent).to.match(/Last search was performed:\.*?\s+0\s+/);
+
+  });
+
   it("reflect seconds if 'now' - 'since' < 1 min", () => {
 
     const now = Date.now() - 35e3;
