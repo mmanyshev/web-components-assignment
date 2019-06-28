@@ -16,8 +16,6 @@ export class BookCard extends AppComponent implements ICarouselSlideCard {
 
   set data(value: OpenLibraryBook) {
 
-    console.log(value);
-
     this.setTitle(value.title);
     this.setAuthors(value.authors);
 

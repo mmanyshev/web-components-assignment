@@ -1,0 +1,48 @@
+
+:host {
+  --loader-size: 64px;
+  --loader-background: transparent;
+}
+
+@keyframes loader-animation {
+
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+
+}
+
+.loader {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: var(--loader-size);
+  height: var(--loader-size);
+
+  border: 0 none;
+  background: var(--loader-background);
+
+}
+
+.loader:after {
+
+  content: "";
+  display: block;
+
+  width: calc(var(--loader-size) - 18px);
+  height: calc(var(--loader-size) - 18px);
+
+  animation: loader-animation 1.2s linear infinite;
+  border-radius: 50%;
+
+  border: 3px solid transparent;
+  border-color: #10559a transparent #10559a transparent;
+  background: var(--loader-background);
+
+}

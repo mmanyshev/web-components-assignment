@@ -18,7 +18,7 @@ export class SearchField extends AppComponent {
     super(style, markup);
 
     this.field = this.root.querySelector("input");
-    this.loader =this.root.querySelector("span");
+    this.loader =this.root.querySelector("mm-loader");
     this.voiceSearchToggle = this.root.querySelector("button");
 
     if (this.field) {
