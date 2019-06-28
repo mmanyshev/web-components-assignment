@@ -36,6 +36,10 @@ export class Carousel extends HTMLElement {
 
     }
 
+    while (wrapperNode.firstChild) {
+      wrapperNode.removeChild(wrapperNode.firstChild);
+    }
+
     const slidesFragment = document.createDocumentFragment();
     slides.forEach((data) => {
 
