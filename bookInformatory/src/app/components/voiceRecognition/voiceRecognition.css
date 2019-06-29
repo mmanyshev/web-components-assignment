@@ -20,3 +20,7 @@ button {
   background: #fff;
 
 }
+
+button.active > svg{
+  fill: #a40802;
+}
