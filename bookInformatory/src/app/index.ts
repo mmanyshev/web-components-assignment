@@ -9,6 +9,12 @@ import { BookInformatory } from "./components/bookInformatory";
 
 // console.log("Helo there!", buildTemplate.toString());
 
+customElements.whenDefined(BookInformatory.TAG_NAME).then(() => {
+
+  document.querySelector(BookInformatory.TAG_NAME)!.removeAttribute("hidden");
+
+});
+
 customElements.define(VoiceRecognition.TAG_NAME, VoiceRecognition);
 customElements.define(TimePastLabel.TAG_NAME, TimePastLabel);
 customElements.define(SearchField.TAG_NAME, SearchField);
