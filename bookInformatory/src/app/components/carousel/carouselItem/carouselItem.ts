@@ -11,6 +11,8 @@ export class CarouselItem extends AppComponent {
 
     this.slideCard = <ICarouselSlideCard>document.createElement(tagName);
 
+    // I should put slides in <slot />
+    // most probably, but not today...
     this.slideCard.data = data;
     this.root.appendChild(this.slideCard);
 

@@ -40,17 +40,12 @@ export class Carousel extends AppComponent {
   }
 
   connectedCallback() {
-
-    this.wrapper!.addEventListener("keydown", this.preventKeysNavigation);
     document.addEventListener("visibilitychange", this.onPageVisibilityChange);
-
   }
 
   discocnnectedCallback() {
 
     this.intersectionObserver.disconnect();
-
-    this.wrapper!.removeEventListener("keydown", this.preventKeysNavigation);
     document.removeEventListener("visibilitychange", this.onPageVisibilityChange);
 
   }
@@ -141,10 +136,6 @@ export class Carousel extends AppComponent {
 
     this.wrapper!.scrollBy(clientWidth, 0);
 
-  }
-
-  private preventKeysNavigation(event: KeyboardEvent) {
-    event.preventDefault();
   }
 
 }
