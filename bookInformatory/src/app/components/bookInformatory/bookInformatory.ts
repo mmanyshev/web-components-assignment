@@ -8,7 +8,8 @@ import { performSearch, OpenLibraryBook } from "app/openLibrary";
 
 import { AppComponent } from "app/appComponent";
 import { Carousel } from "app/components/carousel";
-import { SearchField } from "app/components/searchField";
+import { TimePastLabel } from "app/components/timePastLabel";
+import { SearchField, EVENTS as SEARCH_EVENTS } from "app/components/searchField";
 
 export class BookInformatory extends AppComponent {
 
@@ -16,7 +17,7 @@ export class BookInformatory extends AppComponent {
 
   private readonly carousel: Carousel | null;
   private readonly searchField: SearchField | null;
-  private readonly timeLeftLabel: HTMLElement | null;
+  private readonly timeLeftLabel: TimePastLabel | null;
 
   private lastSearchTimestamp: number = 0;
 
@@ -28,46 +29,42 @@ export class BookInformatory extends AppComponent {
     this.searchField = this.root.querySelector("mm-search-field");
     this.timeLeftLabel = this.root.querySelector("mm-time-past-label");
 
-    this.search = debounce(this.search.bind(this), 500);
+    this.search = debounce(this.search, 400);
 
-    this.root.addEventListener("search-field:change", (event: any) => {
+  }
 
-      const value = event.detail && event.detail.value;
-      console.log("search-field:change", event);
-      this.search(value);
+  connectedCallback() {
 
-    });
+    this.root.addEventListener(
+      SEARCH_EVENTS.SEARCH,
+      this.onSearch as EventListener,
+    );
+
+  }
+
+  disconnectedCalback() {
+
+    this.root.addEventListener(
+      SEARCH_EVENTS.SEARCH,
+      this.onSearch as EventListener,
+    );
 
   }
 
   private onSearchDone(items: OpenLibraryBook[]) {
 
-    if (this.timeLeftLabel) {
-
-      const now = Date.now().toString();
-      this.timeLeftLabel.setAttribute("since", now);
-
-    }
-
-    if (this.carousel) {
-      this.carousel.items = items;
-    }
+    this.carousel!.items = items;
+    this.timeLeftLabel!.since = Date.now();
 
   }
 
-  private setLoading(value: boolean) {
-
-    if (!this.searchField) {
-      return;
-    }
-
-    this.searchField.loading = value;
-
+  private onSearch = (event: CustomEvent) => {
+    this.search(event.detail.value);
   }
 
-  private search(searchString: string) {
+  private search = (searchString: string) => {
 
-    this.setLoading(true);
+    this.searchField!.loading = true;
     this.lastSearchTimestamp = Date.now();
 
     return performSearch(searchString, this.lastSearchTimestamp)
@@ -77,7 +74,7 @@ export class BookInformatory extends AppComponent {
           return;
         }
 
-        this.setLoading(false);
+        this.searchField!.loading = false;
         this.onSearchDone(data.items);
 
       });
@@ -85,5 +82,3 @@ export class BookInformatory extends AppComponent {
   }
 
 }
-
-customElements.define(BookInformatory.TAG_NAME, BookInformatory);

@@ -2,61 +2,49 @@
 import style from "./searchField.css";
 import markup from "./searchField.html";
 
-// import { updateComponentProp } from "app/utils/updateComponentProp";
 import { AppComponent } from "app/appComponent";
+import { Loader } from "app/components/loader";
+
+import { EVENTS as VOICE_EVENTS } from "app/components/voiceRecognition";
+import { EVENTS as SEARCH_EVENTS } from "./";
 
 export class SearchField extends AppComponent {
 
   static TAG_NAME = "mm-search-field";
 
   private readonly field: HTMLInputElement | null;
-  private readonly loader: HTMLElement | null;
-  private readonly voiceSearchToggle: HTMLButtonElement | null;
+  private readonly loader: Loader | null;
 
   constructor() {
 
     super(style, markup);
 
     this.field = this.root.querySelector("input");
-    this.loader =this.root.querySelector("mm-loader");
-    this.voiceSearchToggle = this.root.querySelector("button");
-
-    if (this.field) {
-
-      this.field.addEventListener("change", (event) => {
-        const { value } = <HTMLInputElement>event.target;
-        console.log("hange", value);
-        this.dispatchEvent(
-          new CustomEvent("search-field:change", { detail: { value }, bubbles: true }),
-        );
-      });
-
-    }
+    this.loader = this.root.querySelector("mm-loader");
 
   }
 
   connectedCallback() {
 
-    if (!this.voiceSearchToggle || !this.field) {
-      return;
-    }
+    this.field!.addEventListener("change", this.dispatchSearch);
 
-    if (!("webkitSpeechRecognition" in window)) {
+    this.root.addEventListener(VOICE_EVENTS.RECOGNITION_END, this.dispatchSearch);
+    this.root.addEventListener(VOICE_EVENTS.RECOGNITION_START, this.onVoiceSearchStart);
 
-      this.voiceSearchToggle.setAttribute("hidden", "hiddem");
+    const onVoiceSearchUpdate = this.onVoiceSearchUpdate as EventListener;
+    this.root.addEventListener(VOICE_EVENTS.RECOGNITION_UPDATE, onVoiceSearchUpdate);
 
-    } else {
+  }
 
-      const recognition = new webkitSpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
+  disconnectedCallback() {
 
-      // recognition.onstart = function () { ... };
-      // recognition.onresult = function (event) { ... };
-      // recognition.onerror = function (event) { ... };
-      // recognition.onend = function () { ... };
+    this.field!.removeEventListener("change", this.dispatchSearch);
 
-    }
+    this.root.removeEventListener(VOICE_EVENTS.RECOGNITION_END, this.dispatchSearch);
+    this.root.removeEventListener(VOICE_EVENTS.RECOGNITION_START, this.onVoiceSearchStart);
+
+    const onVoiceSearchUpdate = this.onVoiceSearchUpdate as EventListener;
+    this.root.removeEventListener(VOICE_EVENTS.RECOGNITION_UPDATE, onVoiceSearchUpdate);
 
   }
 
@@ -67,7 +55,7 @@ export class SearchField extends AppComponent {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
     if (name === "loading") {
-      this.updateLaoder();
+      this.loader!.hidden = !this.loading;
     }
 
   }
@@ -89,16 +77,25 @@ export class SearchField extends AppComponent {
 
   }
 
-  private updateLaoder() {
+  private dispatchSearch = () => {
 
-    if (!this.loader) {
-      return;
-    }
+    const value = this.field!.value;
 
-    this.loader.hidden = !this.loading;
+    this.dispatchEvent(
+      new CustomEvent(
+        SEARCH_EVENTS.SEARCH,
+        { detail: { value }, bubbles: true },
+      ),
+    );
 
   }
 
-}
+  private onVoiceSearchStart = () => {
+    this.field!.value = "";
+  }
 
-customElements.define(SearchField.TAG_NAME, SearchField);
+  private onVoiceSearchUpdate = (event: CustomEvent) => {
+    this.field!.value = event.detail;
+  }
+
+}

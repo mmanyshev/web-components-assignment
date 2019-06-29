@@ -120,16 +120,12 @@ export class TimePastLabel extends AppComponent {
 
   private updateLabel = () => {
 
-    if (!this.timeLabel) {
-      return;
-    }
-
     const since = this.since;
 
     if (!since) {
 
-      this.timeLabel.textContent = "-";
-      this.timeLabel.removeAttribute("datetime");
+      this.timeLabel!.textContent = "-";
+      this.timeLabel!.removeAttribute("datetime");
 
       return;
 
@@ -138,11 +134,9 @@ export class TimePastLabel extends AppComponent {
     const timeDiff = Math.abs(since - Date.now());
 
     const [timeSince, unit] = getTimeFormatterArgs(timeDiff);
-    this.timeLabel.textContent = this.timeFormatter.format(-timeSince, unit);
-    this.timeLabel.setAttribute("datetime", new Date(since).toISOString());
+    this.timeLabel!.textContent = this.timeFormatter.format(-timeSince, unit);
+    this.timeLabel!.setAttribute("datetime", new Date(since).toISOString());
 
   }
 
 }
-
-customElements.define(TimePastLabel.TAG_NAME, TimePastLabel);

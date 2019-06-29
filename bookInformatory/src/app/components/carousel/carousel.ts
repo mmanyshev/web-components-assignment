@@ -41,21 +41,16 @@ export class Carousel extends AppComponent {
 
   connectedCallback() {
 
-    if (this.wrapper) {
-      this.wrapper.addEventListener("keydown", this.preventKeysNavigation);
-    }
-
+    this.wrapper!.addEventListener("keydown", this.preventKeysNavigation);
     document.addEventListener("visibilitychange", this.onPageVisibilityChange);
 
   }
 
   discocnnectedCallback() {
 
-    if (this.wrapper) {
-      this.wrapper.removeEventListener("keydown", this.preventKeysNavigation);
-    }
-
     this.intersectionObserver.disconnect();
+
+    this.wrapper!.removeEventListener("keydown", this.preventKeysNavigation);
     document.removeEventListener("visibilitychange", this.onPageVisibilityChange);
 
   }
@@ -76,18 +71,14 @@ export class Carousel extends AppComponent {
 
   private buildSlides(slides: any[]) {
 
-    if (!this.wrapper) {
-      return;
-    }
-
     this.carouselScroller.pause();
 
-    while (this.wrapper.firstChild) {
+    while (this.wrapper!.firstChild) {
 
-      const node = <HTMLElement>this.wrapper.firstElementChild;
+      const node = <HTMLElement>this.wrapper!.firstElementChild;
 
       this.intersectionObserver.unobserve(node);
-      this.wrapper.removeChild(node);
+      this.wrapper!.removeChild(node);
 
     }
 
@@ -101,13 +92,7 @@ export class Carousel extends AppComponent {
     slides.forEach((slideData) =>
       this.appendSlideTo(slidesFragment, slideTagName, slideData));
 
-    // // In order to implemetn smooth scrolling in
-    // // one direction we will need to duplicate first slide in the end
-
-    // const [ firstSlideData ] = slides;
-    // this.appendSlideTo(slidesFragment, slideTagName, firstSlideData)
-
-    this.wrapper.appendChild(slidesFragment);
+    this.wrapper!.appendChild(slidesFragment);
     this.carouselScroller.run();
 
   }
@@ -117,7 +102,6 @@ export class Carousel extends AppComponent {
     entries.forEach((entry) => {
 
       const target = <CarouselItem>entry.target;
-
       if (!entry.isIntersecting || target.loaded) {
         return;
       }
@@ -140,26 +124,22 @@ export class Carousel extends AppComponent {
 
   }
 
-  private autoScroll() {
-
-    if (!this.wrapper) {
-      return;
-    }
+  private autoScroll = () => {
 
     const {
       scrollLeft,
       scrollWidth,
       clientWidth,
-    } = this.wrapper;
+    } = this.wrapper!;
 
     if (scrollLeft === scrollWidth - clientWidth) {
 
-      this.wrapper.scrollTo(0, 0);
+      this.wrapper!.scrollTo(0, 0);
       return;
 
     }
 
-    this.wrapper.scrollBy(clientWidth, 0);
+    this.wrapper!.scrollBy(clientWidth, 0);
 
   }
 
@@ -168,5 +148,3 @@ export class Carousel extends AppComponent {
   }
 
 }
-
-customElements.define(Carousel.TAG_NAME, Carousel);

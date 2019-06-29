@@ -13,7 +13,7 @@ declare namespace Intl {
   const RelativeTimeFormat: any;
 }
 
-declare class webkitSpeechRecognition {
+declare class webkitSpeechRecognition extends SpeechRecognition {
 
   continuous: boolean;
   interimResults: boolean;
@@ -25,6 +25,6 @@ declare class webkitSpeechRecognition {
   onstart: () => void;
   onresult: (event: any) => void;
   onerror: (event: any) => void;
-  onend: (event: any) => void;
+  // onend: (event: any) => void;
 
 }

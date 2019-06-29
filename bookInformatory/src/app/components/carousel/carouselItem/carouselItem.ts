@@ -9,8 +9,7 @@ export class CarouselItem extends AppComponent {
 
   public createSlide(tagName: string, data: any) {
 
-    this.slideCard =
-      <ICarouselSlideCard>document.createElement(tagName);
+    this.slideCard = <ICarouselSlideCard>document.createElement(tagName);
 
     this.slideCard.data = data;
     this.root.appendChild(this.slideCard);
@@ -28,13 +27,7 @@ export class CarouselItem extends AppComponent {
   }
 
   get loaded() {
-
-    return Boolean(
-      this.slideCard && this.slideCard.loaded,
-    );
-
+    return Boolean(this.slideCard && this.slideCard.loaded);
   }
 
 }
-
-customElements.define(CarouselItem.TAG_NAME, CarouselItem);

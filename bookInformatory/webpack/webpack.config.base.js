@@ -128,7 +128,13 @@ module.exports = (options) => ({
     {
 
       port: 3000,
+      compress: true,
+
       hot: false,
+      liveReload: false,
+      injectHot: false,
+      injectClient: false,
+
       contentBase: locations.DIST_FOLDER,
 
     },
