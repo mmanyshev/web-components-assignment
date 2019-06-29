@@ -14,7 +14,14 @@ interface OpenLibrarySearchResult {
 const BASE_URL = "https://openlibrary.org";
 const SEARCH_PAGE_SIZE = 15;
 
-export function performSearch(searchString: string, timestamp: number): Promise<OpenLibrarySearchResult> {
+export function performSearch(
+    searchString: string,
+    timestamp: number,
+  ): Promise<OpenLibrarySearchResult> {
+
+  if (!searchString) {
+    return Promise.resolve({ timestamp, total: 0, items: [] });
+  }
 
   const query = qs.stringify({
     title: searchString,
@@ -27,10 +34,10 @@ export function performSearch(searchString: string, timestamp: number): Promise<
 
       return {
 
+        timestamp,
+
         total: response.numFound,
         items: response.docs.map((doc: any) => new OpenLibraryBook(doc)),
-
-        timestamp,
 
       };
 
