@@ -1,5 +1,4 @@
 
-import style from "./timePastLabel.css";
 import markup from "./timePastLabel.html";
 
 import { updateComponentProp } from "app/utils/updateComponentProp";
@@ -51,7 +50,7 @@ export class TimePastLabel extends AppComponent {
 
   constructor() {
 
-    super(style, markup);
+    super("", markup);
     this.timeLabel = this.root.querySelector("time");
 
     // not looking at cases where user locale

@@ -9,8 +9,8 @@
 
   box-sizing: border-box;
 
-  color: #444;
-  background: #e5e5e5;
+  color: var(--gray-darkest-color);
+  background: var(--gray-light-color);
 
 }
 

@@ -33,6 +33,6 @@
 
   padding: 0 0 0 var(--spacing-m);
 
-  border-left: 1px dashed var(--blue-color-base);
+  border-left: 1px dashed var(--blue-dark-color);
 
 }

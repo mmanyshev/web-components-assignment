@@ -1,14 +1,6 @@
 
 :host {
 
-  --font-size-m: 14px;
-  --font-size-s: 12px;
-
-  --spacing-s: 8px;
-  --spacing-m: 16px;
-
-  --blue-color-base: #10559a;
-
   font-size: var(--font-size-m);
 
   display: block;
@@ -37,7 +29,7 @@ header > h2 {
   border-radius: 3px;
 
   color: #fff;
-  background: var(--blue-color-base);
+  background: var(--blue-dark-color);
 
 }
 
