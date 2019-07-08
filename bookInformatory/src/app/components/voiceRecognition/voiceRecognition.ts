@@ -41,7 +41,7 @@ export class VoiceRecognition extends AppComponent {
     this.toggleButton = this.root.querySelector("button");
 
     if (!this.recognitionService) {
-      this.toggleButton!.setAttribute("sidabled", "");
+      this.toggleButton!.setAttribute("disabled", "");
     }
 
   }
