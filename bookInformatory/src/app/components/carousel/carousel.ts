@@ -1,4 +1,6 @@
 
+import { Key } from "ts-key-enum";
+
 import style from "./carousel.css";
 import markup from "./carousel.html";
 
@@ -37,13 +39,19 @@ export class Carousel extends AppComponent {
   }
 
   connectedCallback() {
+
     document.addEventListener("visibilitychange", this.onPageVisibilityChange);
+
+    this.wrapper!.addEventListener("keydown", this.onKeysScroll);
+
   }
 
   discocnnectedCallback() {
 
     this.intersectionObserver.disconnect();
     document.removeEventListener("visibilitychange", this.onPageVisibilityChange);
+
+    this.wrapper!.removeEventListener("keydown", this.onKeysScroll);
 
   }
 
@@ -136,6 +144,19 @@ export class Carousel extends AppComponent {
     }
 
     this.wrapper!.scrollBy(clientWidth, 0);
+
+  }
+
+  private onKeysScroll = (event: KeyboardEvent) => {
+
+    if (event.key !== Key.ArrowLeft &&
+        event.key !== Key.ArrowRight) {
+
+      return;
+    }
+
+    this.carouselScroller.pause();
+    this.carouselScroller.run();
 
   }
 
