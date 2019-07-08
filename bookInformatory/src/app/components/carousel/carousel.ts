@@ -20,9 +20,6 @@ export class Carousel extends AppComponent {
     super(style, markup);
     this.wrapper = this.root.querySelector(".wrapper");
 
-    this.autoScroll = this.autoScroll.bind(this);
-    this.onPageVisibilityChange = this.onPageVisibilityChange.bind(this);
-
     this.carouselScroller = new IntervalTask(this.autoScroll, 3e3);
 
     // I'm gonna be using intersectionObserver
@@ -68,12 +65,16 @@ export class Carousel extends AppComponent {
 
     this.carouselScroller.pause();
 
-    while (this.wrapper!.firstChild) {
+    let node;
+    while (node = this.wrapper!.firstChild) {
 
-      const node = <HTMLElement>this.wrapper!.firstElementChild;
-
-      this.intersectionObserver.unobserve(node);
       this.wrapper!.removeChild(node);
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return;
+      }
+
+      this.intersectionObserver.unobserve(<HTMLElement>node);
 
     }
 
@@ -107,7 +108,7 @@ export class Carousel extends AppComponent {
 
   }
 
-  private onPageVisibilityChange() {
+  private onPageVisibilityChange = () => {
 
     if (document.hidden) {
       this.carouselScroller.pause();

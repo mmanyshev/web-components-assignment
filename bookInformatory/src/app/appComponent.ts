@@ -3,7 +3,7 @@ export class AppComponent extends HTMLElement {
 
   public readonly root: ShadowRoot;
 
-  constructor(style: string = "", markup: string = "", ) {
+  constructor(style: string = "", markup: string = "") {
 
     super();
 
@@ -17,7 +17,7 @@ export class AppComponent extends HTMLElement {
   private static buildTemplate = (style: String, markup: String) => {
 
     const template = document.createElement("template");
-    template.innerHTML =`<style>${style}</style>${markup}`;
+    template.innerHTML = `<style>${style}</style>${markup}`;
 
     return template;
 
