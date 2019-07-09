@@ -7,7 +7,9 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack/webpack.config.dev.js",
     "build": "rimraf ./dist && cross-env NODE_ENV=development webpack --config ./webpack/webpack.config.dev.js",
     "test": "npm run build && karma start",
-    "lint": "tslint ./src/**/*.ts --exclude './src/**/*.d.ts' --fix "
+    "lint": "npm run lint:ts && npm run lint:js",
+    "lint:ts": "tslint ./src/**/*.ts --exclude './src/**/*.d.ts' --fix",
+    "lint:js": "eslint --ignore-path ./.gitignore --fix ."
   },
   "author": "",
   "license": "ISC",

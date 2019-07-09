@@ -4,6 +4,10 @@
     "browser": true
   },
   "globals": {
+    "chai": true,
     "expect": true
+  },
+  "rules": {
+    "strict": "off"
   }
 }
