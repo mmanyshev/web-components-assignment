@@ -52,7 +52,7 @@ describe("<mm-search-field>", () => {
     });
 
     fieldInput.value = "Game of Thrones";
-    fieldInput.dispatchEvent(new Event("change"), { bubbles: true });
+    fieldInput.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
 
   });
 

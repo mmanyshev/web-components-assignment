@@ -5,7 +5,8 @@ import style from "./carousel.css";
 import markup from "./carousel.html";
 
 import { AppComponent } from "app/appComponent";
-import { IntervalTask } from "app/intervalTask";
+import { IntervalTask } from "app/timerTask";
+
 import { CarouselItem } from "./carouselItem";
 
 export class Carousel extends AppComponent {
@@ -71,7 +72,7 @@ export class Carousel extends AppComponent {
 
   private buildSlides(slides: any[]) {
 
-    this.carouselScroller.pause();
+    this.carouselScroller.reset();
 
     let node;
     while (node = this.wrapper!.firstChild) {
@@ -119,7 +120,7 @@ export class Carousel extends AppComponent {
   private onPageVisibilityChange = () => {
 
     if (document.hidden) {
-      this.carouselScroller.pause();
+      this.carouselScroller.reset();
     }
 
     if (!document.hidden) {
@@ -155,7 +156,7 @@ export class Carousel extends AppComponent {
       return;
     }
 
-    this.carouselScroller.pause();
+    this.carouselScroller.reset();
     this.carouselScroller.run();
 
   }

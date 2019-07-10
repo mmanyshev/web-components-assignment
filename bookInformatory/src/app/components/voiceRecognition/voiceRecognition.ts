@@ -2,6 +2,7 @@
 import style from "./voiceRecognition.css";
 import markup from "./voiceRecognition.html";
 
+import { TimeoutTask } from "app/timerTask";
 import { AppComponent } from "app/appComponent";
 
 import {
@@ -18,6 +19,7 @@ export class VoiceRecognition extends AppComponent {
   private readonly recognitionService: SpeechRecognition | null = null;
 
   private isRecording: boolean = false;
+  private readonly recognitionWatchDog: TimeoutTask;
 
   constructor() {
 
@@ -25,7 +27,7 @@ export class VoiceRecognition extends AppComponent {
 
     if ("webkitSpeechRecognition" in window) {
 
-      this.recognitionService = new webkitSpeechRecognition();
+      this.recognitionService = new webkitSpeechRecognition() || new SpeechRecognition();
 
       // OpenLibrary doesn't really support
       // other locales in search API, so...
@@ -33,30 +35,51 @@ export class VoiceRecognition extends AppComponent {
       this.recognitionService.continuous = true;
       this.recognitionService.interimResults = true;
 
-      this.recognitionService.onend = this.onRecognitionStop;
       this.recognitionService.onresult = this.onRecognitionResult;
+      this.recognitionService.onend = this.onRecognitionStop;
+      this.recognitionService.onspeechend = this.stopRecording;
 
     }
 
     this.toggleButton = this.root.querySelector("button");
+    this.recognitionWatchDog = new TimeoutTask(this.stopRecording, 1e3);
 
     if (!this.recognitionService) {
+      this.toggleButton!.setAttribute("hidden", "");
       this.toggleButton!.setAttribute("disabled", "");
     }
 
   }
 
   connectedCallback() {
-
-    this.toggleButton!
-      .addEventListener("click", this.onToggleRecording);
-
+    this.toggleButton!.addEventListener("click", this.onToggleRecording);
   }
 
   disconnectedCallback() {
+    this.toggleButton!.removeEventListener("click", this.onToggleRecording);
+  }
 
-    this.toggleButton!
-      .removeEventListener("click", this.onToggleRecording);
+  startRecording = () => {
+
+    if (this.isRecording) {
+      return;
+    }
+
+    this.recognitionService!.start();
+    this.toggleButton!.classList.add("active");
+
+    this.dispatchEvent(
+      new CustomEvent(RECOGNITION_START, { bubbles: true }),
+    );
+
+  }
+
+  stopRecording = () => {
+
+    this.recognitionService!.stop();
+    this.toggleButton!.classList.remove("active");
+
+    this.recognitionWatchDog.reset();
 
   }
 
@@ -65,19 +88,9 @@ export class VoiceRecognition extends AppComponent {
     try {
 
       if (this.isRecording) {
-
-        this.recognitionService!.stop();
-        this.toggleButton!.classList.remove("active");
-
+        this.stopRecording();
       } else {
-
-        this.recognitionService!.start();
-        this.toggleButton!.classList.add("active");
-
-        this.dispatchEvent(
-          new CustomEvent(RECOGNITION_START, { bubbles: true }),
-        );
-
+        this.startRecording();
       }
 
       this.isRecording = !this.isRecording;
@@ -103,9 +116,11 @@ export class VoiceRecognition extends AppComponent {
       ),
     );
 
+    this.recognitionWatchDog.run();
+
   }
 
-  onRecognitionStop = (event: Event) => {
+  onRecognitionStop = () => {
 
     const finalEvent = new CustomEvent(RECOGNITION_END, { bubbles: true });
     this.dispatchEvent(finalEvent);
