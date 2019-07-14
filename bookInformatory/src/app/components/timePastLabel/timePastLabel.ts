@@ -2,8 +2,8 @@
 import markup from "./timePastLabel.html";
 
 import { updateComponentProp } from "app/utils/updateComponentProp";
+import { IntervalTask } from "app/timerTask";
 import { AppComponent } from "app/appComponent";
-import { IntervalTask } from "app/intervalTask";
 
 const UPDATE_INTERVAL = 8e3;
 
@@ -74,7 +74,7 @@ export class TimePastLabel extends AppComponent {
   }
 
   disconnectedCallback() {
-    this.updateTimeLabelTask.pause();
+    this.updateTimeLabelTask.reset();
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -83,7 +83,7 @@ export class TimePastLabel extends AppComponent {
       return;
     }
 
-    this.updateTimeLabelTask.pause();
+    this.updateTimeLabelTask.reset();
     this.updateTimeLabelTask.runOnce();
 
     if (!this.since) {

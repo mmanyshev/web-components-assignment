@@ -3,7 +3,7 @@ describe("<mm-time-past-label>", () => {
 
   before(() => {
     document.body.innerHTML = "";
-  })
+  });
 
   it("renders default label", () => {
 
@@ -38,7 +38,7 @@ describe("<mm-time-past-label>", () => {
 
     const label = document.querySelector("mm-time-past-label");
 
-    const now = Date.now()
+    const now = Date.now();
     label.since = now;
 
     expect(label.getAttribute("since")).to.be.equal(now.toString());

@@ -7,7 +7,9 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack/webpack.config.dev.js",
     "build": "rimraf ./dist && cross-env NODE_ENV=development webpack --config ./webpack/webpack.config.dev.js",
     "test": "npm run build && karma start",
-    "lint": "tslint ./src/**/*.ts"
+    "lint": "npm run lint:ts && npm run lint:js",
+    "lint:ts": "tslint ./src/**/*.ts --exclude './src/**/*.d.ts' --fix",
+    "lint:js": "eslint --ignore-path ./.gitignore --fix ."
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +31,7 @@
     "rimraf": "2.6.3",
     "source-map-loader": "0.2.4",
     "ts-debounce": "1.0.0",
+    "ts-key-enum": "2.0.0",
     "ts-loader": "6.0.4",
     "tslint": "5.18.0",
     "tslint-config-airbnb": "5.11.1",

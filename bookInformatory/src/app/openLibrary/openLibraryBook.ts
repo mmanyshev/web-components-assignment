@@ -39,7 +39,7 @@ function buildCoverUrls(doc: any): OpenLibraryCover {
     return {};
   }
 
-  const [ idKey, id ] = coverParams;
+  const [idKey, id] = coverParams;
 
   return {
     small: buildSingleCoverUrl(idKey, id, "S"),

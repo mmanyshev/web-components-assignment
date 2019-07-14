@@ -1,4 +1,6 @@
 
+import { Key } from "ts-key-enum";
+
 import style from "./searchField.css";
 import markup from "./searchField.html";
 
@@ -26,7 +28,7 @@ export class SearchField extends AppComponent {
 
   connectedCallback() {
 
-    this.field!.addEventListener("change", this.dispatchSearch);
+    this.field!.addEventListener("keydown", this.onSearch);
 
     this.root.addEventListener(VOICE_EVENTS.RECOGNITION_END, this.dispatchSearch);
     this.root.addEventListener(VOICE_EVENTS.RECOGNITION_START, this.onVoiceSearchStart);
@@ -38,7 +40,7 @@ export class SearchField extends AppComponent {
 
   disconnectedCallback() {
 
-    this.field!.removeEventListener("change", this.dispatchSearch);
+    this.field!.removeEventListener("keydown", this.onSearch);
 
     this.root.removeEventListener(VOICE_EVENTS.RECOGNITION_END, this.dispatchSearch);
     this.root.removeEventListener(VOICE_EVENTS.RECOGNITION_START, this.onVoiceSearchStart);
@@ -87,6 +89,16 @@ export class SearchField extends AppComponent {
         { detail: { value }, bubbles: true },
       ),
     );
+
+  }
+
+  onSearch = (event: KeyboardEvent) => {
+
+    if (event.key !== Key.Enter) {
+      return;
+    }
+
+    this.dispatchSearch();
 
   }
 

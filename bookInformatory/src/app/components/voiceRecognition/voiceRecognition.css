@@ -17,7 +17,7 @@ button {
   height: var(--field-height);
 
   border: 0 none;
-  background: #fff;
+  background: transparent;
 
 }
 

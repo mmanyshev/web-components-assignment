@@ -1,9 +1,12 @@
 
+import { Key } from "ts-key-enum";
+
 import style from "./carousel.css";
 import markup from "./carousel.html";
 
 import { AppComponent } from "app/appComponent";
-import { IntervalTask } from "app/intervalTask";
+import { IntervalTask } from "app/timerTask";
+
 import { CarouselItem } from "./carouselItem";
 
 export class Carousel extends AppComponent {
@@ -19,9 +22,6 @@ export class Carousel extends AppComponent {
 
     super(style, markup);
     this.wrapper = this.root.querySelector(".wrapper");
-
-    this.autoScroll = this.autoScroll.bind(this);
-    this.onPageVisibilityChange = this.onPageVisibilityChange.bind(this);
 
     this.carouselScroller = new IntervalTask(this.autoScroll, 3e3);
 
@@ -40,13 +40,19 @@ export class Carousel extends AppComponent {
   }
 
   connectedCallback() {
+
     document.addEventListener("visibilitychange", this.onPageVisibilityChange);
+
+    this.wrapper!.addEventListener("keydown", this.onKeysScroll);
+
   }
 
   discocnnectedCallback() {
 
     this.intersectionObserver.disconnect();
     document.removeEventListener("visibilitychange", this.onPageVisibilityChange);
+
+    this.wrapper!.removeEventListener("keydown", this.onKeysScroll);
 
   }
 
@@ -66,14 +72,18 @@ export class Carousel extends AppComponent {
 
   private buildSlides(slides: any[]) {
 
-    this.carouselScroller.pause();
+    this.carouselScroller.reset();
 
-    while (this.wrapper!.firstChild) {
+    let node;
+    while (node = this.wrapper!.firstChild) {
 
-      const node = <HTMLElement>this.wrapper!.firstElementChild;
-
-      this.intersectionObserver.unobserve(node);
       this.wrapper!.removeChild(node);
+
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return;
+      }
+
+      this.intersectionObserver.unobserve(<HTMLElement>node);
 
     }
 
@@ -107,10 +117,10 @@ export class Carousel extends AppComponent {
 
   }
 
-  private onPageVisibilityChange() {
+  private onPageVisibilityChange = () => {
 
     if (document.hidden) {
-      this.carouselScroller.pause();
+      this.carouselScroller.reset();
     }
 
     if (!document.hidden) {
@@ -135,6 +145,19 @@ export class Carousel extends AppComponent {
     }
 
     this.wrapper!.scrollBy(clientWidth, 0);
+
+  }
+
+  private onKeysScroll = (event: KeyboardEvent) => {
+
+    if (event.key !== Key.ArrowLeft &&
+        event.key !== Key.ArrowRight) {
+
+      return;
+    }
+
+    this.carouselScroller.reset();
+    this.carouselScroller.run();
 
   }
 
