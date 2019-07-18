@@ -33,6 +33,10 @@ export class BookInformatory extends AppComponent {
 
   }
 
+  // public get tagName() {
+  //   return BookInformatory.TAG_NAME;
+  // }
+
   connectedCallback() {
 
     this.root.addEventListener(
